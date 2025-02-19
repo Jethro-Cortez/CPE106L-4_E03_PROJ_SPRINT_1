@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Feedback for {{ book.title }}</h2>
+
+<form method="POST">
+    <textarea name="review_text" required></textarea><br>
+    <button type="submit">Submit Review</button>
+</form>
+
+<h3>Reviews</h3>
+{% for feedback in feedbacks %}
+    <p><strong>{{ feedback.user.username }}:</strong> {{ feedback.review_text }}</p>
+{% endfor %}
+{% endblock %} 
