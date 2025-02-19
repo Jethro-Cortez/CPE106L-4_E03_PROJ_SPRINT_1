@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ book.title }}</h2>
+<p><strong>Author:</strong> {{ book.author }}</p>
+<p><strong>Genre:</strong> {{ book.genre }}</p>
+<p><strong>Availability:</strong> {{ 'Available' if book.availability else 'Borrowed' }}</p>
+
+{% if current_user.is_authenticated and current_user.role == 'user' %}
+    {% if book.availability %}
+        <form method="POST" action="{{ url_for('main.borrow_book', book_id=book.id) }}">
+            <button type="submit" class="btn btn-primary">Borrow</button>
+        </form>
+    {% else %}
+        <p>This book is currently borrowed.</p>
+    {% endif %}
+{% endif %}
+
+<h3>Reviews</h3>
+{% for feedback in feedbacks %}
+    <p><strong>{{ feedback.user.username }}:</strong> {{ feedback.review_text }}</p>
+{% endfor %}
+
+{% if current_user.is_authenticated and current_user.role == 'user' %}
+<form method="POST" action="{{ url_for('main.add_feedback', book_id=book.id) }}">
+    <textarea name="review_text" class="form-control" required></textarea><br>
+    <button type="submit" class="btn btn-primary">Submit Review</button>
+</form>
+{% endif %}
+{% endblock %}
